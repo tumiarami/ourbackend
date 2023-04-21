@@ -68,11 +68,13 @@ async function server() {
         })
 
         app.post("/uploads", async(req, res) => {
+            console.log('hit');
             const buffer = Buffer.from(req?.files?.file?.data);
             const pictureCollection = database.collection(req?.body?.gallery);
             let base64String = buffer?.toString('base64');
+            console.log(req?.body?.secret);
 
-            const encodedb64 = encode("1318",base64String);
+            const encodedb64 = encode(req?.body?.secret ,base64String);
             const cursor = await pictureCollection.insertOne({name: req?.files?.file?.name, b64: encodedb64});
             res.send(cursor);
         })
