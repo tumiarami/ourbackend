@@ -68,11 +68,9 @@ async function server() {
         })
 
         app.post("/uploads", async(req, res) => {
-            console.log('hit');
             const buffer = Buffer.from(req?.files?.file?.data);
             const pictureCollection = database.collection(req?.body?.gallery);
             let base64String = buffer?.toString('base64');
-            console.log(req?.body?.secret);
 
             const encodedb64 = encode(req?.body?.secret ,base64String);
             const cursor = await pictureCollection.insertOne({name: req?.files?.file?.name, b64: encodedb64});
@@ -87,6 +85,9 @@ async function server() {
                 const decoded = decode(req.body?.secret, data[i].b64)
                 data[i].b64 = decoded;
             }
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header('Access-Control-Allow-Methods', 'DELETE, PUT, GET, POST');
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
             res.json(data);
         })
     }
