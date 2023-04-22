@@ -18,7 +18,7 @@ const superAdminKey = `${process.env.SUPER_ADMIN_KEY}`;
 app.use(cors({
   origin: '*', // use your actual domain name (or localhost), using * is not recommended
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Origin', 'X-Requested-With', 'Accept', 'x-client-key', 'x-client-token', 'x-client-secret', 'Authorization'],
+  allowedHeaders: '*',
   credentials: true
 }))
 app.use(express.json())
@@ -92,7 +92,8 @@ async function server() {
             }
             res.header("Access-Control-Allow-Origin", "*");
             res.header('Access-Control-Allow-Methods', 'DELETE, PUT, GET, POST');
-            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+            res.header("Access-Control-Allow-Headers", "*");
+            // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
             res.json(data);
         })
     }
