@@ -85,10 +85,6 @@ async function server() {
                 const decoded = decode(req.body?.secret, data[i].b64)
                 data[i].b64 = decoded;
             }
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header('Access-Control-Allow-Methods', 'DELETE, PUT, GET, POST');
-            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, Content-length");
-            res.header("Transfer-Encoding", "chunked")
             res.json(data);
         })
     }
