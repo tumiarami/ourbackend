@@ -15,7 +15,12 @@ var uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const superAdminKey = `${process.env.SUPER_ADMIN_KEY}`;
 
-app.use(cors())
+app.use(cors({
+  origin: '*', // use your actual domain name (or localhost), using * is not recommended
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Origin', 'X-Requested-With', 'Accept', 'x-client-key', 'x-client-token', 'x-client-secret', 'Authorization'],
+  credentials: true
+}))
 app.use(express.json())
 app.use(fileUpload());
 
