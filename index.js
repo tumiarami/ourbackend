@@ -49,6 +49,7 @@ async function server() {
         await client.connect();
         const database = client.db('ourdb');                         // Database Name 
         const usersCollection = database.collection('user');
+        const galleryCollection = database.collection('all_gallery');
         console.log('Database Connected');
 
         app.get('/user', async(req, res) => {
@@ -56,9 +57,19 @@ async function server() {
             res.json(user);
         })
 
-        app.post('/user', async(req, res) => {
-            const cursor = await usersCollection.insertOne(req.body);
+        app.post('/gallery', async(req, res) => {
+            const cursor = await galleryCollection.insertOne(req.body);
             res.json(cursor);
+        })
+
+        app.get('/gallery', async(req, res) => {
+            const user = await galleryCollection.find({}).toArray();
+            res.json(user);
+        })
+
+        app.get('/user', async(req, res) => {
+            const user = await usersCollection.find({}).toArray();
+            res.json(user);
         })
 
         app.get('/userid', async(req, res) => {
