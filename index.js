@@ -104,12 +104,19 @@ async function server() {
         }
     }
 
-    server().catch(console.dir)
+    // server().catch(console.dir)
     
     app.get('/', (req, res) => {
       res.send(`API Rinning On Port : ${port}`)
     })
+
+
+    server().then(() => {
+        app.listen(port, () => {
+            console.log(`Example app listening at Port No : ${port}`);
+        })
+    }).catch(console.dir)
     
-    app.listen(port, () => {
-      console.log(`Example app listening at http://localhost:${port}`)
-})
+    // app.listen(port, () => {
+    //   console.log(`Example app listening at http://localhost:${port}`)
+    // })
