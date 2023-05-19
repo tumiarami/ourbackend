@@ -15,7 +15,7 @@ var uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const superAdminKey = `${process.env.SUPER_ADMIN_KEY}`;
 
-app.use(cors());
+app.use(cors({ origin: "*", credentials: true }));
 app.use(express.json());
 app.use(fileUpload());
 
@@ -57,6 +57,11 @@ async function server() {
             res.json(user);
         })
 
+        app.post('/user', async(req, res) => {
+            const user = await usersCollection.insertOne(req.body);
+            res.json(user);
+        })
+
         app.post('/gallery', async(req, res) => {
             const cursor = await galleryCollection.insertOne(req.body);
             res.json(cursor);
@@ -65,11 +70,6 @@ async function server() {
         app.get('/gallery', async(req, res) => {
             const query = {"secret":false};
             const user = await galleryCollection.find(query).toArray();
-            res.json(user);
-        })
-
-        app.get('/user', async(req, res) => {
-            const user = await usersCollection.find({}).toArray();
             res.json(user);
         })
 
