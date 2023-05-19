@@ -63,7 +63,8 @@ async function server() {
         })
 
         app.get('/gallery', async(req, res) => {
-            const user = await galleryCollection.find({}).toArray();
+            const query = {"secret":false};
+            const user = await galleryCollection.find(query).toArray();
             res.json(user);
         })
 
