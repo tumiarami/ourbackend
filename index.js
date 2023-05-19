@@ -21,6 +21,18 @@ app.use(cors({
 app.use(express.json());
 app.use(fileUpload());
 
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-credentials", "true");
+    res.header("Acces-Control-Allow-Origin", "*");
+    res.header(
+      "Acces-Control-Allow-Header", 
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization, X-CSRF-Token"
+    );
+    res.header('Acces-Control-Allow-Methods', "GET,OPTIONS, POST, DELETE, PUT, PATCH");
+  
+    next();
+  })
+
 
 const decode = (secret, ciphertext) => {
     const dec = [];
