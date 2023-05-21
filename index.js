@@ -118,8 +118,10 @@ async function server() {
                     data[i].b64 = decoded;
                 }
                 if(i === data.length){
-                    res.json(data);
+                    res.setHeader("Acces-Control-Allow-Origin", "*");
+                    res.status(200).json(data);
                 } else {
+                    res.setHeader("Acces-Control-Allow-Origin", "*");
                     res.json("No Picture Found");
                 }
             }
