@@ -20,13 +20,13 @@ app.use(express.json());
 app.use(fileUpload());
 
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-credentials", "true");
-    res.header("Acces-Control-Allow-Origin", "*");
-    res.header(
+    res.setHeader("Access-Control-Allow-credentials", "true");
+    res.setHeader("Acces-Control-Allow-Origin", "*");
+    res.setHeader(
       "Acces-Control-Allow-Header", 
       "Origin, X-Requested-With, Content-Type, Accept, Authorization, X-CSRF-Token"
     );
-    res.header('Acces-Control-Allow-Methods', "GET,OPTIONS, POST, DELETE, PUT, PATCH");
+    res.setHeader('Acces-Control-Allow-Methods', "GET,OPTIONS, POST, DELETE, PUT, PATCH");
   
     next();
   })
@@ -110,13 +110,6 @@ async function server() {
                 data[i].b64 = decoded;
             }
             res.json(data);
-            res.header("Access-Control-Allow-credentials", "true");
-            res.header("Acces-Control-Allow-Origin", "*");
-            res.header(
-              "Acces-Control-Allow-Header", 
-              "Origin, X-Requested-With, Content-Type, Accept, Authorization, X-CSRF-Token"
-            );
-            res.header('Acces-Control-Allow-Methods', "GET,OPTIONS, POST, DELETE, PUT, PATCH");
         })
     }
         finally{
