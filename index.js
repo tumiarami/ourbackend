@@ -110,6 +110,7 @@ async function server() {
                 data[i].b64 = decoded;
             }
             res.json(data);
+            return;
         })
     }
         finally{
