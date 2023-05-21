@@ -85,6 +85,12 @@ async function server() {
             res.json(user);
         })
 
+        app.get('/secret', async(req, res) => {
+            const query = {"secret":true};
+            const user = await galleryCollection.find(query).toArray();
+            res.json(user);
+        })
+
         app.get('/userid', async(req, res) => {
             const filter = {email:req?.query?.email};
             const user = await usersCollection.find(filter).toArray();
