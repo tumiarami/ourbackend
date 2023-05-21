@@ -105,15 +105,22 @@ async function server() {
             const pictureCollection = database.collection(req.body?.gallery);
             const data = await pictureCollection.find({}).toArray();
 
-            for(let i = 0; i < data.length; i++){
-                const decoded = decode(req.body?.secret, data[i].b64)
-                data[i].b64 = decoded;
+            let i = 0;
+            if(data.length){
+                for(i; i < data.length; i++){
+                    const decoded = decode(req.body?.secret, data[i].b64)
+                    data[i].b64 = decoded;
+                }
+                if(i === data.length){
+                    res.json(data);
+                } else {
+                    res.json("No Picture Found");
+                }
             }
-            res.json(data);
             return;
         })
     }
-        finally{
+    finally {
             // await client.close();
         }
     }
