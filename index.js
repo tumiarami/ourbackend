@@ -119,7 +119,7 @@ async function server() {
                 if(i === data.length){
                     res.status(200).json(data);
                 } else {
-                    res.json("No Picture Found");
+                    res.status(200).json("No Picture Found");
                 }
             }
             return;
