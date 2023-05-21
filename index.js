@@ -113,21 +113,22 @@ async function server() {
             const pictureCollection = database.collection(req.body?.gallery);
             const data = await pictureCollection.find({}).toArray();
 
-            let i = 0;
-            if(data.length){
-                for(i; i < data.length; i++){
-                    const decoded = decode(req.body?.secret, data[i].b64)
-                    data[i].b64 = decoded;
-                }
-                if(i === data.length){
-                    res.setHeader("Acces-Control-Allow-Origin", "*");
-                    res.status(200).json(data);
-                } else {
-                    res.setHeader("Acces-Control-Allow-Origin", "*");
-                    res.json("No Picture Found");
-                }
-            }
-            return;
+            // let i = 0;
+            // if(data.length){
+            //     for(i; i < data.length; i++){
+            //         const decoded = decode(req.body?.secret, data[i].b64)
+            //         data[i].b64 = decoded;
+            //     }
+            //     if(i === data.length){
+            //         res.setHeader("Acces-Control-Allow-Origin", "*");
+            //         res.status(200).json(data);
+            //     } else {
+            //         res.setHeader("Acces-Control-Allow-Origin", "*");
+            //         res.json("No Picture Found");
+            //     }
+            // }
+            // return;
+            res.json("send");
         })
     }
     finally {
