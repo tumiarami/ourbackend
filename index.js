@@ -16,7 +16,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 const superAdminKey = `${process.env.SUPER_ADMIN_KEY}`;
 
 app.use(cors({
-    origin:"http://localhost:3000"
+    origin:"*"
 }));
 app.use(express.json());
 app.use(fileUpload());
