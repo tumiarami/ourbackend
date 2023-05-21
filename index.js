@@ -15,9 +15,7 @@ var uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const superAdminKey = `${process.env.SUPER_ADMIN_KEY}`;
 
-app.use(cors({
-    origin:"*"
-}));
+app.use(cors());
 app.use(express.json());
 app.use(fileUpload());
 
@@ -29,7 +27,6 @@ app.use((req, res, next) => {
       "Origin, X-Requested-With, Content-Type, Accept, Authorization, X-CSRF-Token"
     );
     res.setHeader('Acces-Control-Allow-Methods', "GET,OPTIONS, POST, DELETE, PUT, PATCH");
-  
     next();
   })
 
@@ -112,23 +109,20 @@ async function server() {
         app.post('/picture', async(req, res) => {
             const pictureCollection = database.collection(req.body?.gallery);
             const data = await pictureCollection.find({}).toArray();
-
-            // let i = 0;
-            // if(data.length){
-            //     for(i; i < data.length; i++){
-            //         const decoded = decode(req.body?.secret, data[i].b64)
-            //         data[i].b64 = decoded;
-            //     }
-            //     if(i === data.length){
-            //         res.setHeader("Acces-Control-Allow-Origin", "*");
-            //         res.status(200).json(data);
-            //     } else {
-            //         res.setHeader("Acces-Control-Allow-Origin", "*");
-            //         res.json("No Picture Found");
-            //     }
-            // }
-            // return;
-            res.json("send");
+            const secretcode = req?.body?.secret;
+            let i = 0;
+            if(data.length){
+                for(i; i < data?.length; i++){
+                    const decoded = decode(secretcode, data[i]?.b64);
+                    data[i]?.b64 = decoded;
+                }
+                if(i === data.length){
+                    res.status(200).json(data);
+                } else {
+                    res.json("No Picture Found");
+                }
+            }
+            return;
         })
     }
     finally {
