@@ -113,8 +113,8 @@ async function server() {
             let i = 0;
             if(data.length){
                 for(i; i < data?.length; i++){
-                    const decoded = decode(secretcode, data[i]?.b64);
-                    data[i]?.b64 = decoded;
+                    const decoded = decode(secretcode, data[i].b64);
+                    data[i].b64 = decoded;
                 }
                 if(i === data.length){
                     res.status(200).json(data);
