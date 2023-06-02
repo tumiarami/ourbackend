@@ -134,9 +134,18 @@ async function server() {
             return;
         })
 
+        app.post('/dlen', async(req, res) => {
+            console.log("---HIT---");
+            const pictureCollection = database.collection(req.body?.gallery);
+            const len = await pictureCollection.find({}).toArray();
+            console.log(len.length);
+            res.json(len?.length);
+        })
+
         app.post('/picture', async(req, res) => {
             console.log(req?.body?.start);
             const pictureCollection = database.collection(req.body?.gallery);
+            const len = await pictureCollection.find({}).toArray();
             const data = await pictureCollection.find({}).skip(req?.body?.start).limit(5).toArray();
             const secretcode = req?.body?.secret;
             let i = 0;
