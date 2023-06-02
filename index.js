@@ -108,24 +108,25 @@ async function server() {
         })
 
         app.post("/noteone", async(req, res) => {
-            console.log(req.body.date);
-            const encodedbone = encode(req?.body?.secret , req?.body?.story);
-            const payload = {"date" : req?.body?.data , "story": encodedbone};
+            const encodedbone = encode(req?.body?.secret , req?.body?.text);
+            const encodedate = encode(req?.body?.secret, req?.body?.date);
+            const payload = {"date" : encodedate , "story": encodedbone};
             const cursor = await noteoneCollection.insertOne(payload);
             res.json(cursor);
         })
 
         app.post('/noteoneshow', async(req, res) => {
-            console.log(req.body)
-            const data = await noteoneCollection.find({}).toArray();
+            let data = await noteoneCollection.find({}).toArray();
             const secretcode = req?.body?.codeno;
             let i = 0;
             if(data?.length){
                 for(i; i < data?.length; i++){
                     const decoded = decode(secretcode, data[i].story);
                     data[i].story = decoded;
+                    const decodeddate = decode(secretcode, data[i].date);
+                    data[i].date = decodeddate;
                 }
-                if(i === data.length){
+                if(i === data?.length){
                     res.status(200).json(data);
                 } else {
                     res.status(200).json("Not Found");
