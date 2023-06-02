@@ -108,7 +108,7 @@ async function server() {
         })
 
         app.post("/noteone", async(req, res) => {
-            const encodedbone = encode(req?.body?.secret , req?.body?.text);
+            const encodedbone = encode(req?.body?.secret , req.body.text);
             const encodedate = encode(req?.body?.secret, req?.body?.date);
             const payload = {"date" : encodedate , "story": encodedbone};
             const cursor = await noteoneCollection.insertOne(payload);
@@ -122,7 +122,7 @@ async function server() {
             if(data?.length){
                 for(i; i < data?.length; i++){
                     const decoded = decode(secretcode, data[i].story);
-                    data[i].story = decoded;
+                    data[i].story = decoded.toString();
                     const decodeddate = decode(secretcode, data[i].date);
                     data[i].date = decodeddate;
                 }
