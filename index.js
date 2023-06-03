@@ -142,10 +142,8 @@ async function server() {
         })
 
         app.post('/picture', async(req, res) => {
-            console.log(req?.body?.start);
             const pictureCollection = database.collection(req.body?.gallery);
-            const len = await pictureCollection.find({}).toArray();
-            const data = await pictureCollection.find({}).skip(req?.body?.start).limit(5).toArray();
+            const data = await pictureCollection.find({}).skip(req?.body?.start).limit(req?.body?.limit).toArray();
             const secretcode = req?.body?.secret;
             let i = 0;
             if(data.length){
@@ -166,8 +164,6 @@ async function server() {
             // await client.close();
         }
     }
-
-    // server().catch(console.dir)
     
     app.get('/', (req, res) => {
       res.send(`API Rinning On Port : ${port}`)
@@ -179,7 +175,3 @@ async function server() {
             console.log(`Example app listening at Port No : ${port}`);
         })
     }).catch(console.dir)
-    
-    // app.listen(port, () => {
-    //   console.log(`Example app listening at http://localhost:${port}`)
-    // })
