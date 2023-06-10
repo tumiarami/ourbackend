@@ -62,6 +62,7 @@ async function server() {
         const usersCollection = database.collection('user');
         const galleryCollection = database.collection('all_gallery');
         const noteoneCollection = database.collection('noteone');
+        const notetwoCollection = database.collection('notetwo');
         console.log('Database Connected');
 
         app.get('/user', async(req, res) => {
@@ -117,8 +118,38 @@ async function server() {
             res.json(cursor);
         })
 
+        app.post("/notetwo", async(req, res) => {
+            const textdata = encodeURI(req?.body?.text);
+            const datedata = encodeURI(req?.body?.date);
+            const encodedbone = encode(req?.body?.secret , textdata);
+            const encodedate = encode(req?.body?.secret, datedata);
+            const payload = {"date" : encodedate , "story": encodedbone};
+            const cursor = await notetwoCollection.insertOne(payload);
+            res.json(cursor);
+        })
+
         app.post('/noteoneshow', async(req, res) => {
             let data = await noteoneCollection.find({}).toArray();
+            const secretcode = req?.body?.codeno;
+            let i = 0;
+            if(data?.length){
+                for(i; i < data?.length; i++){
+                    const decoded = decode(secretcode, data[i].story);
+                    data[i].story = decoded.toString();
+                    const decodeddate = decode(secretcode, data[i].date);
+                    data[i].date = decodeddate;
+                }
+                if(i === data?.length){
+                    res.status(200).json(data);
+                } else {
+                    res.status(200).json("Not Found");
+                }
+            }
+            return;
+        })
+
+        app.post('/notetwoshow', async(req, res) => {
+            let data = await notetwoCollection.find({}).toArray();
             const secretcode = req?.body?.codeno;
             let i = 0;
             if(data?.length){
