@@ -108,8 +108,10 @@ async function server() {
         })
 
         app.post("/noteone", async(req, res) => {
-            const encodedbone = encode(req?.body?.secret , req.body.text);
-            const encodedate = encode(req?.body?.secret, req?.body?.date);
+            const textdata = encodeURI(req?.body?.text);
+            const datedata = encodeURI(req?.body?.date);
+            const encodedbone = encode(req?.body?.secret , textdata);
+            const encodedate = encode(req?.body?.secret, datedata);
             const payload = {"date" : encodedate , "story": encodedbone};
             const cursor = await noteoneCollection.insertOne(payload);
             res.json(cursor);
