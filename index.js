@@ -54,6 +54,16 @@ const decode = (secret, ciphertext) => {
     return Buffer.from(str, 'binary').toString('base64');
   };
 
+  function formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) {
+      return '0 Bytes';
+    }
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
+  }
+
 
 async function server() {
     try{
@@ -102,7 +112,6 @@ async function server() {
             const buffer = Buffer.from(req?.files?.file?.data);
             const pictureCollection = database.collection(req?.body?.gallery);
             let base64String = buffer?.toString('base64');
-
             const encodedb64 = encode(req?.body?.secret ,base64String);
             const cursor = await pictureCollection.insertOne({name: req?.files?.file?.name, b64: encodedb64});
             res.send(cursor);
@@ -191,6 +200,19 @@ async function server() {
                 }
             }
             return;
+        })
+
+        app.get('/memory', async(req, res) => {  
+            database.command({ dbStats: 1 }, (err, stats) => {
+            if (err) {
+              console.error('Error retrieving database statistics:', err);
+              return;
+            }
+            const totalSpace = stats.storageSize;
+            const availSpace = stats.storageSize - stats.dataSize;
+            const response = {totalSpace:formatBytes(totalSpace), availSpace:formatBytes(availSpace)};
+            res.json(response);
+          });
         })
     }
     finally {
